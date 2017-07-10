@@ -190,14 +190,14 @@ server <- function(input,output,session){
         else{(input$slope)*x() + (1.75/10)*((-x())+10)*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
       }
       else if(input$rb2 == "noqu"){
-        if(input$rb1 == "yes"){(input$slope)*x() + 0.5*b*((x()-5)^2) + arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
-        else if(input$rb1 == "nofr"){(input$slope)*x() + 0.5*b*((x()-5)^2) + (1.75/10)*x()*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
-        else{(input$slope)*x() + 0.5*b*((x()-5)^2) + (1.75/10)*((-x())+10)*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
+        if(input$rb1 == "yes"){(input$slope)*x() + 0.5*sqrt(input$slope)*((x()-5)^2) + arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
+        else if(input$rb1 == "nofr"){(input$slope)*x() + 0.5*sqrt(input$slope)*((x()-5)^2) + (1.75/10)*x()*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
+        else{(input$slope)*x() + 0.5*sqrt(input$slope)*((x()-5)^2) + (1.75/10)*((-x())+10)*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
       }
       else{
-        if(input$rb1 == "yes"){(input$slope)*x() + 2*b*(sin(x())) + arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
-        else if(input$rb1 == "nofr"){(input$slope)*x() + 2*b*(sin(x())) + (1.75/10)*x()*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
-        else{(input$slope)*x() + 2*b*(sin(x())) + (1.75/10)*((-x())+10)*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
+        if(input$rb1 == "yes"){(input$slope)*x() + 2*input$slope*(sin(x())) + arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
+        else if(input$rb1 == "nofr"){(input$slope)*x() + 2*input$slope*(sin(x())) + (1.75/10)*x()*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
+        else{(input$slope)*x() + 2*input$slope*(sin(x())) + (1.75/10)*((-x())+10)*arima.sim(model=list(ar=0.9),n=input$numpts,sd = sd(e()))}
         
       }
       
