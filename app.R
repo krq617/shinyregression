@@ -247,6 +247,11 @@ server <- function(input,output,session){
   zrvo <- reactive({data.frame(coeff3(),ord(),dt())})
   zlev <- reactive({data.frame(cookd(),hats(),dt())})
   
+  yd <- reactive({quantile(coeff3(), c(0.25, 0.75))})
+  xd <- qnorm(c(0.25, 0.75))
+  slp <- reactive({diff(yd())/diff(xd)})
+  int <- reactive({yd()[1] - slp() * xd[1]})
+
   ###################
   # ggplots         #
   ###################
@@ -254,6 +259,7 @@ server <- function(input,output,session){
   pqq <- reactive({ggplot(zqq(),aes(coeff1(),coeff2())) + 
       geom_point(colour = factor(dt()),size = 2)+
       scale_colour_manual(values = c("black", "red"),guide = FALSE)+
+      geom_abline(slope = slp(), intercept = int())+
       ggtitle("Normal Q-Q plot")+
       xlab("Theoretical Quantiles")+
       ylab("Sample Quantiles")+
@@ -320,7 +326,7 @@ server <- function(input,output,session){
         coeff <- reg1()$coefficients
         eq <- paste0("Scatterplot with y = ", round(coeff[2],2), "*x + ", round(coeff[1],2))
         plot1<- p+geom_point(size = 2)+
-          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "red",size = 1.2)+
+          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "black",size = 1.2)+
           ggtitle(eq)+
           xlab("X")+
           ylab("Y")+
@@ -332,12 +338,12 @@ server <- function(input,output,session){
         coeff <- reg1()$coefficients
         eq <- paste0("Scatterplot with y = ", round(coeff[2],2), "*x + ", round(coeff[1],2))
         plot1<- p+geom_point(size = 2)+
-          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "red",size = 1.2)+
+          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "black",size = 1.2)+
           ggtitle(eq)+
           xlab("X")+
           ylab("Y")+
-          geom_line(aes(x = seqt,y = conf1),linetype = "longdash",colour = "blue",size = 1.2)+
-          geom_line(aes(x = seqt,y = conf2),linetype = "longdash",colour = "blue",size = 1.2)+
+          geom_line(aes(x = seqt,y = conf1),linetype = "dashed",colour = "blue",size = 1.2)+
+          geom_line(aes(x = seqt,y = conf2),linetype = "dashed",colour = "blue",size = 1.2)+
           scale_colour_manual(guide = FALSE) +
           scale_linetype_manual(guide = FALSE)+
           theme_bw()
@@ -350,12 +356,12 @@ server <- function(input,output,session){
         coeff <- reg1()$coefficients
         eq <- paste0("Scatterplot with y = ", round(coeff[2],2), "*x + ", round(coeff[1],2))
         plot1<- p+geom_point(size = 2)+
-          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "red",size = 1.2)+
+          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "black",size = 1.2)+
           ggtitle(eq)+
           xlab("X")+
           ylab("Y")+
-          geom_line(aes(x = seqt,y = pred1),linetype = "longdash", colour = "red",size = 1.2) +
-          geom_line(aes(x = seqt,y = pred2),linetype = "longdash",colour = "red",size = 1.2) +
+          geom_line(aes(x = seqt,y = pred1),linetype = "dashed", colour = "red",size = 1.2) +
+          geom_line(aes(x = seqt,y = pred2),linetype = "dashed",colour = "red",size = 1.2) +
           scale_colour_manual(guide = FALSE) +
           scale_linetype_manual(guide = FALSE)+
           theme_bw()
@@ -367,14 +373,14 @@ server <- function(input,output,session){
         coeff <- reg1()$coefficients
         eq <- paste0("Scatterplot with y = ", round(coeff[2],2), "*x + ", round(coeff[1],2))
         plot1<- p+geom_point(size = 2)+
-          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "red",size = 1.2)+
+          geom_abline(intercept = reg1()$coefficients[1],slope = reg1()$coefficients[2],color = "black",size = 1.2)+
           ggtitle(eq)+
           xlab("X")+
           ylab("Y")+
-          geom_line(aes(x = seqt,y = conf1),linetype = "longdash",colour = "blue",size = 1.2)+
-          geom_line(aes(x = seqt,y = conf2),linetype = "longdash",colour = "blue",size = 1.2)+
-          geom_line(aes(x = seqt,y = pred1),linetype = "longdash", colour = "red",size = 1.2) +
-          geom_line(aes(x = seqt,y = pred2),linetype = "longdash", colour = "red",size = 1.2) +
+          geom_line(aes(x = seqt,y = conf1),linetype = "dashed",colour = "blue",size = 1.2)+
+          geom_line(aes(x = seqt,y = conf2),linetype = "dashed",colour = "blue",size = 1.2)+
+          geom_line(aes(x = seqt,y = pred1),linetype = "dashed", colour = "red",size = 1.2) +
+          geom_line(aes(x = seqt,y = pred2),linetype = "dashed", colour = "red",size = 1.2) +
           scale_colour_manual(guide = FALSE) +
           scale_linetype_manual(guide = FALSE)+
           theme_bw()
