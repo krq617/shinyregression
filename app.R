@@ -170,14 +170,14 @@ server <- function(input,output,session){
         else{(input$slope)*x() + (1.75/10)*((-x())+10)*e()}
       }
       else if(input$rb2 == "noqu"){
-        if(input$rb1 == "yes"){(input$slope)*x() + 0.5*b*((x()-5)^2) + e()}
-        else if(input$rb1 == "nofr"){(input$slope)*x() + 0.5*b*((x()-5)^2) + (1.75/10)*x()*e()}
-        else{(input$slope)*x() + 0.5*b*((x()-5)^2) + (1.75/10)*((-x())+10)*e()}
+        if(input$rb1 == "yes"){(input$slope)*x() + 0.5*sqrt(input$slope)*((x()-5)^2) + e()}
+        else if(input$rb1 == "nofr"){(input$slope)*x() + 0.5*sqrt(input$slope)*((x()-5)^2) + (1.75/10)*x()*e()}
+        else{(input$slope)*x() + 0.5*sqrt(input$slope)*((x()-5)^2) + (1.75/10)*((-x())+10)*e()}
       }
       else{
-        if(input$rb1 == "yes"){(input$slope)*x() + 2*b*(sin(x())) + e()}
-        else if(input$rb1 == "nofr"){(input$slope)*x() + 2*b*(sin(x())) + (1.75/10)*x()*e()}
-        else{(input$slope)*x() + 2*b*(sin(x())) + (1.75/10)*((-x())+10)*e()}
+        if(input$rb1 == "yes"){(input$slope)*x() + 2*input$slope*(sin(x())) + e()}
+        else if(input$rb1 == "nofr"){(input$slope)*x() + 2*input$slope*(sin(x())) + (1.75/10)*x()*e()}
+        else{(input$slope)*x() + 2*input$slope*(sin(x())) + (1.75/10)*((-x())+10)*e()}
         
       }
     }
