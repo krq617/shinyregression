@@ -6,12 +6,13 @@ ui <- fluidPage(  fluidRow(column(4, column(11, offset = 1, fluidRow(tags$h2("Li
                                             fluidRow(style = "border-style: solid;background-color:#D3D3D3;border-color: #000000;",column(6,
                                                                                                                                           numericInput(inputId = "numpts",label = "Enter a Number of Points",value = 30, min = 2,max = 1000, step = 10),
                                                                                                                                           numericInput(inputId = "slope",label = "Enter a Slope",value = 1, min = -1000,max = 1000, step = 1),
-                                                                                                                                          radioButtons(inputId = "rb1", label = "Residual Equal Variance?", choices = c("Yes" = "yes","No, Fan Right" = "nofr","No, Fan Left"="nofl"))
+                                                                                                                                          selectInput(inputId = "rb1", label = "Residual Equal Variance?", choices = c("Yes" = "yes","No, Fan Right" = "nofr","No, Fan Left"="nofl"))
                                             ),
                                             column(6,
                                                    numericInput(inputId = "error",label = "Enter a Standard Deviation",value = 1, min = 0,max = 10, step = 0.1),
-                                                   radioButtons(inputId = "rb2", label = "Linear Relationship?", choices = c("Yes" = "yes","No, Quadratic" = "noqu","No, oscillating "="nofl")),
-                                                   radioButtons(inputId = "rb3", label = "Independent?", choices = c("Yes" = "yes","No" = "nod"))
+                                                   selectInput(inputId = "rb2", label = "Linear Relationship?", choices = c("Yes" = "yes","No, Quadratic" = "noqu","No, oscillating "="nofl")),
+                                                   selectInput(inputId = "rb3", label = "Independent?", choices = c("Yes" = "yes","No" = "nod")),
+                                                   selectInput(inputId = "rb4", label = "Normal?", choices = c("Yes" = "yes","No, right skew" = "nors", "No, left skew" = "nols"))
                                             )
                                             )
 )),
@@ -160,7 +161,10 @@ server <- function(input,output,session){
     else{ximp()}
   }
     })
-  e <- reactive({ rnorm(input$numpts,mean = 0*input$slope,sd = input$error)})
+  e <- reactive({ if(input$rb4 == "yes"){rnorm(input$numpts,mean = 0*input$slope,sd = input$error)}
+    else if(input$rb4 == "nors"){rgamma(input$numpts,1.3,1.13 + 0*input$slope*input$error)-1.146}
+    else {-(rgamma(input$numpts,1.3,1.13 + 0*input$slope*input$error)-1.146)}
+    })
   y1 <- reactive({
   if(input$usefile == FALSE){  
     if(input$rb3 == "yes"){
